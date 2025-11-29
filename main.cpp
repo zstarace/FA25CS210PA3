@@ -1,7 +1,6 @@
 //
 // Created by Manju Muralidharan on 11/22/25.
-//
-
+// Zoe Starace CS 210
 
 #include <iostream>
 #include <vector>
@@ -118,42 +117,68 @@ void printPath(pair<int,int> exitcell,
 // STUDENTS IMPLEMENT DFS HERE
 // Add arguments, return type, and logic
 // ----------------------------------------------------------
+//depth-first search to see if a path exists from (r, c) to the exit
+//uses recursion to explore and mark the visited cells and record each cell's parent so the final path can be reconstructed.
 bool dfs(int r, int c, const vector<vector<int>>& maze, vector<vector<bool>>& visited, vector<vector<int>>& parent_r, vector<vector<int>>& parent_c, int exit_r, int exit_c ){
+
     int N = maze.size();
     int M = maze[0].size();
+
+    //check if (r, c) is outside the boundaries of the maze
     if (r<0 || r>=N || c<0 || c>=M) {
         return false;
     }
+
+    //if the cell is a wall(1), cant move here
     if (maze[r][c] == 1) {
         return false;
     }
+
+    //avoir revisting cells
     if (visited[r][c]) {
         return false;
     }
-    visited[r][c] = true;
+
+    //mark the current cell as visited
+    visited[r][c] = true;\
+
+    //if the exit cell is reached, DFS is sucessful
     if(r == exit_r && c == exit_c) {
         return true;
     }
+
+    //explore each of the four possible directions
     for (int k = 0; k < 4; k++) {
         int nr = r + dr[k];
         int nc = c + dc[k];
 
+
+        //skip neighbors out of bounds
         if (nr < 0 || nr >= N || nc < 0 || nc >= M) {
             continue;
         }
+
+        //skip walls
         if (maze[nr][nc] == 1) {
             continue;
         }
+
+        //skip visited cells
         if (visited[nr][nc]) {
             continue;
         }
+
+        //record the parent of the neighbor before recursion
         parent_r[nr][nc] = r;
         parent_c[nr][nc] = c;
 
+
+        //recursively search from the neighbor
         if (dfs(nr, nc, maze, visited, parent_r, parent_c, exit_r, exit_c)) {
             return true;
         }
     }
+    //no path found
     return false;
 }
 
